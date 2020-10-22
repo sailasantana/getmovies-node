@@ -45,5 +45,17 @@ app.get('/movie', function getMovie(req,res){
           movie.genre.toLowerCase().includes(req.query.genre.toLowerCase())
         )
       }
+
+      if (req.query.avg_vote) {
+        response = response.filter(movie =>
+          movie.avg_vote >= req.query.avg_vote
+        )
+      }
+      res.json(response)
+  })
+  
+
+app.listen(PORT, () => {
+    console.log(`Server is listening at http://localhost:${PORT}`)
 })
 
