@@ -1,11 +1,12 @@
-requrie('dotenv').config()
+require('dotenv').config()
 
-const express = requrie('express')
+const express = require('express')
 const morgan = require('morgan')
 const helmet = require('helmet')
 const movies = require('./movies.json')
 const app = express()
 const PORT = 8000
+const cors = require('cors')
 
 app.use(morgan('dev'))
 app.use(cors())
@@ -20,6 +21,7 @@ app.use(function validateBearerToken(req, res, next){
     const apiToken = process.env.API_TOKEN
     const authToken = req.get('Authorization')
 
+
     if(!authToken || authToken.split(' ')[1] !== apiToken){
         return res.status(401).json({error: "Unauthorized request"})
     }
@@ -31,6 +33,7 @@ app.use(function validateBearerToken(req, res, next){
 app.get('/movie', function getMovie(req,res){
 
     let response = movies
+
 
     if (req.query.name) {
         response = response.filter(movie =>
@@ -51,7 +54,8 @@ app.get('/movie', function getMovie(req,res){
           movie.avg_vote >= req.query.avg_vote
         )
       }
-      res.json(response)
+     
+      return res.json(response)
   })
   
 
