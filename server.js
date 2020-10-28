@@ -5,17 +5,19 @@ const morgan = require('morgan')
 const helmet = require('helmet')
 const movies = require('./movies.json')
 const app = express()
-const PORT = 8000
+const PORT = process.env.PORT || 8000
 const cors = require('cors')
 
-app.use(morgan('dev'))
+
+app.use(morgan(morganSetting))
 app.use(cors())
 app.use(helmet())
 
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common'
 
 
 
-console.log(process.env.API_TOKEN)
+
 
 app.use(function validateBearerToken(req, res, next){
     const apiToken = process.env.API_TOKEN
@@ -45,7 +47,7 @@ app.get('/movie', function getMovie(req,res){
       if (req.query.name) {
         response = response.filter(movie =>
           // case insensitive searching
-          movie.genre.toLowerCase().includes(req.query.genre.toLowerCase())
+          movie.country.toLowerCase().includes(req.query.country.toLowerCase())
         )
       }
 
